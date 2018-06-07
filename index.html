@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Monte Carlo - Damian Petroff</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <script src="external/bootstrap-formhelpers-number.js"></script>
+  <link rel="stylesheet" href="boostrap-formhelper.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+
+</head>
+<body>
+  <div class="container">﻿
+    <div class="page-header">
+      <h1>2231.3 - Algorithmes numériques : Mini projet</h1>
+      <p>Auteur : Damian Petroff - INF2dlm-b</p>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <h2>Principe</h2>
+        <p>Le but de ce mini-projet est d'utiliser une méthode dite "de Monte Carlo" afin de trouver l'aire de différentes formes/polygones.</br></p>
+        <p>Le principe de la méthode que l'on va utiliser ici est d'encadrer la forme sélectionnée par un carré. Ensuite, on va générer des points aléatoirement dans ce carré, le nombre de points générés est réglable.
+            On va par la suite compter le nombre de points qui ont été générés à l'intérieur de la forme et le diviser par le nombre de points total. grâce à ce ratio compris entre 0 et 1, on va pouvoir approximer l'aire de la forme en le multipliant par l'aire du carré qui encardre la forme.
+        </p>
+        <p>Objectifs principaux :
+          <ul>
+            <li>Approximer π ;</li>
+            <li>Reconnaître si des points font partie d'une forme au moyen de divers méthodes de calcul ;</li>
+            <li>Constater la précision d'une telle méthode.</li>
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+        <div id="draw"></div>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <h2>Sélection de la forme</h2>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="formes">Forme</label>
+          </div>
+          <select class="custom-select" id="formes">
+            <option name="forme" value="circle" selected>Cercle</option>
+            <option name="forme" value="rectangle">Rectangle</option>
+            <option name="forme" value="triangle">Triangle</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-group" id="cercle">
+            <br>
+              <label for="radius_number">Rayon : </label><br>
+              <input class="custom_number" id="radius_number"  type="number" value="5" max="1000000000" min="1">
+          </div>
+          <div class="form-group" id="rectangle">
+            <br>
+              <label for="side_a">Largeur : </label><br>
+              <input class="custom_number" id="side_a" type="number" value="4" min="1" max="100000"><br>
+              <label for="side_b">Hauteur : </label><br>
+              <input class="custom_number" id="side_b" type="number" value="6" min="1" max="100000">
+          </div>
+          <div class="form-group" id="triangle">
+            <br>
+            <label for="">Base : </label><br>
+            <input class="custom_number" id="triangle_base" type="number" value="4" min="1" max="100000"><br>
+            <label for="">Hauteur : </label><br>
+            <input class="custom_number" id="triangle_height" type="number" value="6" min="1" max="100000">
+          </div>
+          <div>
+            <br>
+            <label for="iterations">Itérations : </label><br>
+            <input class="custom_number" id="iterations" type="number" value="100000" min="10" max="10000000">
+            <br><br>
+          </div>
+          <div style="text-align:center;">
+            <button id="solve" class="btn btn-primary" onclick="solve();">Approximer l'aire et π</button>
+          </div>
+            <hr>
+              <p id="results"></p>
+              <p id="approx_pi"></p>
+            </hr>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h2>Références de développement</h2>
+    		 <ul class="a-autoFill">
+          <li>Monte Carlo method : <a href="https://geekyisawesome.blogspot.ch/2013/03/montecarlo-method-of-finding-area-of.html"></a></li>
+          <li>Bootstrap : <a href="https://getbootstrap.com/docs/4.1/getting-started/introduction/"></a></li>
+          <li>Draw avec p5 : <a href="https://p5js.org/reference/"></a></li>
+        </ul>
+    </div>
+</body>
+</html>
