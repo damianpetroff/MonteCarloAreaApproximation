@@ -1,5 +1,3 @@
-# Monte-Carlo method are approximation
-
 <div class="page-header">
   <h3><img src="external/resources/img/logo_hearc_ingenierie.png" alt="logo_hearc_ingenierie" width="150"> 2231.3 - Numerical Algorithms : Individual Project</h3>
   <p class="lead">Author : Damian Petroff, INF2dlm-b - Last update : 12th June 2018</p>
