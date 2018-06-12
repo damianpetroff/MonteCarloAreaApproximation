@@ -5,9 +5,11 @@
 //TODO : comment !
 //TODO : clarify *1
 
+
 //BONUS TODO :
 // custom color
 // custom polygon
+// dark mode
 // Run 100 times and get best precision
 // Make an option abling to do "infinite" iterations, refreshing the datas all the time getting more and more precise. may be difficult. with button stop of course
 
@@ -31,7 +33,7 @@ function draw() {
   noFill();
   //rect(0,0,cWidth,cHeight);
   stroke(color(0,0,0));
-  switch($('option:selected', '#formes').val()){
+  switch($('option:selected', '#shapes').val()){
     case 'circle':
       //rect(0,0,cWidth-1, cHeight-1);
       //fill(color(255,109,0))
@@ -49,12 +51,15 @@ function draw() {
       else rect((cWidth-(cWidth*r))/2,0,cWidth*r,cHeight);
       break;
     case 'triangle':
+      textSize(32);
+      fill(255,0,0);
+      text('Not yet implemented', cWidth/3, cWidth/2);
       break;
     default:
       break;
   }
 
-  //Affichage des points aléatoires
+  //Random points display
   noStroke();
   fill(color(255,20,30));
   let nPointsToDraw=min(points.length, Math.pow(10,POW-2));
@@ -64,7 +69,7 @@ function draw() {
 }
 
 function solve() {
-  let n = $('#iterations').val(); //TODO : champ de saisie du nombre d'itérations
+  let n = $('#n_points').val(); //TODO : champ de saisie du nombre d'itérations
   let ratio = 0;
   let trueArea = 0;
   let foundArea = 0;
@@ -72,7 +77,7 @@ function solve() {
   let approxPi = -1;
   points = [];
   generateRandomPoints(n);
-  switch($('option:selected', '#formes').val()){
+  switch($('option:selected', '#shapes').val()){
     case 'circle':
       let radius = $('#radius_number').val();
       ratio = evaluateRatioCircle(radius);
@@ -97,21 +102,15 @@ function solve() {
 
 function evaluateRatioCircle(radius){
   let nOfIn=0;
-  for(let i=0;i<points.length;i++){
+  for(let i=0;i<points.length;i++)
     if(Math.sqrt(Math.pow(points[i][0],2)+Math.pow(points[i][1],2))<=1) //Fonction d'évaluation
-    {
       nOfIn++;
-    }
-  }
-  console.log("ratio:"+nOfIn/points.length)
   return nOfIn/points.length;
 }
 
 function evaluateRatioRectangle(rect_width, rect_height){
   let nOfIn=0;
   let res = rect_width/rect_height;
-  console.log("Resolution:"+res);
-  console.log("width:"+rect_width+" height:"+rect_height);
   for(let i=0;i<points.length;i++){
     if(res<1) //Fonction d'évaluation
     {
@@ -123,40 +122,42 @@ function evaluateRatioRectangle(rect_width, rect_height){
     }
     else return 1; //Si le rectangle est un carré, on a l'aire 100% des points dedans
   }
-  let ratio = nOfIn/points.length;
-  console.log("Ratio:"+ratio);
-  return ratio;
+  return nOfIn/points.length;
 }
 
-function generateRandomPoints(n){
+function generateRandomPoints(n){ //The points are generated within [0;1[ interval for both x and y coords
   for(let i=0;i<n; i++)
     points.push([(Math.random()), (Math.random())]);
 }
 
 function updateData(trueArea, foundArea, precisionInPercent, n, approxPi=-1){
     let precision = decoratePrecision(precisionInPercent);
-    document.getElementById("results").innerHTML =  "<b>Vrai aire : </b>"+trueArea+
-                                                    "<b><br>Trouvé : </b>"+foundArea+
-                                                    "<b><br>Précision : </b>"+precision;
-    if(approxPi!=-1) document.getElementById("approx_pi").innerHTML = "<hr><b>π ≈ </b>"+Math.PI+"<br><b>Approx. : </b>"+ compareString(Math.PI.toString(),approxPi.toString())[1];
+    document.getElementById("results").innerHTML =  "<hr><b>True area : </b>"+trueArea+
+                                                    "<b><br>Found area : </b>"+foundArea+
+                                                    "<b><br>Precision : </b>"+precision;
+    if(approxPi!=-1) document.getElementById("approx_pi").innerHTML = "<hr><b>π ≈ </b>"+Math.PI+"<br><b>Approxation : </b>"+ compareString(Math.PI.toString(),approxPi.toString())[1];
 }
 
 function decoratePrecision(p){
   p=p.toFixed(4);
-  if(p>=99.99)
+  if(p>=99.9999)
   {
-    return "<font color=\"green\">"+p+" % <span class=\"badge badge-success\">Very gooooooood !</span></font>";
+    return "<font color=\"green\">"+p+" % <span class=\"badge badge-success\">Perfect !</span></font>";
+  }
+  else if(p>=99.99)
+  {
+    return "<font color=\"green\">"+p+" % <span class=\"badge badge-success\">Very good !</span></font>";
   }
   else if(p>=99.9)
   {
-    return "<font color=\"green\">"+p+" % <span class=\"badge badge-success\">Good !</span></font>";
+    return "<font color=\"green\">"+p+" % <span class=\"badge badge-success\">Good</span></font>";
   }
   else if(p>=95.0)
   {
     return "<font color=\"orange\">"+p+" % <span class=\"badge badge-warning\">Ok</span></font>";
   }
   else {
-    return "<font color=\"red\">"+p+" % <span class=\"badge badge-danger\">Sort of bad...</span></font>";
+    return "<font color=\"red\">"+p+" % <span class=\"badge badge-danger\">Bad...</span></font>";
   }
 }
 
@@ -201,31 +202,30 @@ function cleanResultsAndPoints(){
 }
 
 function updateFields(){
-  console.log("aaaa");
-  switch($('option:selected', '#formes').val()){
+  switch($('option:selected', '#shapes').val()){
     case 'circle':
       $('#rectangle').hide();
       $('#triangle').hide();
-      $('#cercle').show();
-      document.getElementById('solve').innerHTML = "Approximer l'aire et π";
+      $('#circle').show();
+      document.getElementById('solve').innerHTML = "Approximate area and π";
      break;
     case 'rectangle':
-      $('#cercle').hide();
+      $('#circle').hide();
       $('#triangle').hide();
       $('#rectangle').show();
-      document.getElementById('solve').innerHTML = "Approximer l'aire du rectangle";
+      document.getElementById('solve').innerHTML = "Approximate area of the rectangle";
      break;
     case 'triangle':
       $('#rectangle').hide();
-      $('#cercle').hide();
+      $('#circle').hide();
       $('#triangle').show();
-      document.getElementById('solve').innerHTML = "Approximer l'aire du triangle";
+      document.getElementById('solve').innerHTML = "Approximate area of the triangle";
      break;
   }
 }
 
 $(document).ready(function(){
-  $('#formes').on('change', function() {
+  $('#shapes').on('change', function() {
     updateFields();
     cleanResultsAndPoints();
   });

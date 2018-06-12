@@ -16,22 +16,44 @@
 <body>
   <div class="container">﻿
     <div class="page-header">
-      <h1>2231.3 - Algorithmes numériques : Mini projet</h1>
-      <p>Auteur : Damian Petroff - INF2dlm-b</p>
+      <h3><img src="external/resources/img/logo_hearc_ingenierie.png" alt="logo_hearc_ingenierie" width="150"> 2231.3 - Numerical Algorithms : Individual Project</h3>
+      <p class="lead">Author : Damian Petroff, INF2dlm-b - Last update : 12th June 2018</p>
+      <hr><br>
+      <div>
+      <h1 class="center">Approximation d'aire grâce à une méthode de Monte Carlo</h1>
+      <h2 class="center">Area approximation with Monte-Carlo method</h2>
+      </div><br><br>
     </div>
     <div class="row">
       <div class="col-md-12 col-sm-12">
-        <h2>Principe</h2>
-        <p>Le but de ce mini-projet est d'utiliser une méthode dite "de Monte Carlo" afin de trouver l'aire de différentes formes/polygones.</br></p>
-        <p>Le principe de la méthode que l'on va utiliser ici est d'encadrer la forme sélectionnée par un carré. Ensuite, on va générer des points aléatoirement dans ce carré, le nombre de points générés est réglable.
-            On va par la suite compter le nombre de points qui ont été générés à l'intérieur de la forme et le diviser par le nombre de points total. grâce à ce ratio compris entre 0 et 1, on va pouvoir approximer l'aire de la forme en le multipliant par l'aire du carré qui encardre la forme.
+        <h3><img src="external/resources/img/flag_fr.png" alt="flag_fr" width="20"/> Principe</h3> <!--icon source : https://www.flaticon.com/-->
+        <p>
+          Le but de ce mini-projet d'étude est d'utiliser une méthode dite de "<abbr title="Le terme méthode de Monte-Carlo, ou méthode Monte-Carlo, désigne une famille de méthodes algorithmiques visant à calculer une valeur numérique approchée en utilisant des procédés aléatoires, c'est-à-dire des techniques probabilistes. Le nom de ces méthodes, qui fait allusion aux jeux de hasard pratiqués à Monte-Carlo, a été inventé en 1947 par Nicholas Metropolis, et publié pour la première fois en 1949 dans un article coécrit avec Stanislaw Ulam.
+
+Source : https://fr.wikipedia.org/wiki/Méthode_de_Monte-Carlo">Monte-Carlo</abbr>" afin d'approximer l'aire de différentes formes ou polygones.<br></p>
+        <p>Le principe de la méthode que l'on va utiliser ici est d'encadrer la forme sélectionnée par un carré. Ensuite, on va générer un nombre donné de points aléatoires (en utilisant <code>Math.Random</code>) dans ce carré. On va par la suite calculer un <b>rapport</b>, le nombre de points qui ont été générés à l'intérieur de la forme, divisé par le nombre de points total. Grâce à ce rapport compris entre 0 et 1, on va pouvoir approximer l'aire de la forme en le multipliant par l'aire du carré qui encardre la forme.
         </p>
         <p>Objectifs principaux :
           <ul>
             <li>Approximer π ;</li>
             <li>Reconnaître si des points font partie d'une forme au moyen de divers méthodes de calcul ;</li>
             <li>Constater la précision d'une telle méthode.</li>
+          </ul>
+
+
+        <h3><img src="external/resources/img/flag_en.png" alt="flag_en" width="20"/> Main idea</h3> <!--icon source : https://www.flaticon.com/-->
+        <p>The objective of this school project is to use the so-called "<abbr title="Monte Carlo methods (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. Their essential idea is using randomness to solve problems that might be deterministic in principle. They are often used in physical and mathematical problems and are most useful when it is difficult or impossible to use other approaches. Monte Carlo methods are mainly used in three problem classes: optimization, numerical integration, and generating draws from a probability distribution.
+
+Source : https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo</abbr>" method in order to approximate various shapes' or polygons' area.<br></p>
+        <p>The idea of this method is to frame the given shape with a square. Thereafter we can generate a given number of random points (using <code>Math.Random</code>) within the square. Thus, we can calculate a <b>ratio</b>. the nomber of points that landed inside the custom shape, divided by the total number of points. Then, the approximated area is the area of the square multiplied by this ratio which is within iterval [0, 1]
         </p>
+        <p>Main objectives :
+          <ul>
+            <li>Appriximate π ;</li>
+            <li>Use various calculation methods in order to tell if a points is within a shape on a 2D graph ;</li>
+            <li>Evaluate the precision of such a method.</li>
+          </ul>
+
       </div>
     </div>
     <hr>
@@ -40,60 +62,64 @@
         <div id="draw"></div>
       </div>
       <div class="col-md-4 col-sm-12">
-        <h2>Sélection de la forme</h2>
+        <h2>Shape selection :</h2>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="formes">Forme</label>
+            <label class="input-group-text" for="shapes">Shape</label>
           </div>
-          <select class="custom-select" id="formes">
-            <option name="forme" value="circle" selected>Cercle</option>
-            <option name="forme" value="rectangle">Rectangle</option>
-            <option name="forme" value="triangle">Triangle</option>
+          <select class="custom-select" id="shapes">
+            <option value="circle" selected>Circle</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="triangle">Triangle</option>
           </select>
         </div>
         <div>
-          <div class="form-group" id="cercle">
+          <div class="form-group" id="circle">
             <br>
-              <label for="radius_number">Rayon : </label><br>
+              <label for="radius_number">Radius : </label>
               <input class="custom_number" id="radius_number"  type="number" value="5" max="1000000000" min="1">
           </div>
           <div class="form-group" id="rectangle">
             <br>
-              <label for="side_a">Largeur : </label><br>
+              <label for="side_a">Width : </label>
               <input class="custom_number" id="side_a" type="number" value="4" min="1" max="100000"><br>
-              <label for="side_b">Hauteur : </label><br>
+              <label for="side_b">Height : </label>
               <input class="custom_number" id="side_b" type="number" value="6" min="1" max="100000">
           </div>
           <div class="form-group" id="triangle">
             <br>
-            <label for="">Base : </label><br>
+            <label for="triangle_base">Base : </label><br>
             <input class="custom_number" id="triangle_base" type="number" value="4" min="1" max="100000"><br>
-            <label for="">Hauteur : </label><br>
+            <label for="triangle_height">Height : </label><br>
             <input class="custom_number" id="triangle_height" type="number" value="6" min="1" max="100000">
           </div>
           <div>
             <br>
-            <label for="iterations">Itérations : </label><br>
-            <input class="custom_number" id="iterations" type="number" value="100000" min="10" max="10000000">
+            <label for="n_points">Number of points : </label><br>
+            <input class="custom_number" id="n_points" type="number" value="100000" min="10" max="10000000">
             <br><br>
           </div>
           <div style="text-align:center;">
-            <button id="solve" class="btn btn-primary" onclick="solve();">Approximer l'aire et π</button>
+            <button id="solve" class="btn btn-primary" onclick="solve();">Approximate area and π</button>
           </div>
-            <hr>
               <p id="results"></p>
               <p id="approx_pi"></p>
-            </hr>
           </div>
         </div>
       </div>
       <hr>
-      <h2>Références de développement</h2>
+      <h2>References</h2>
     		 <ul class="a-autoFill">
-          <li>Monte Carlo method : <a href="https://geekyisawesome.blogspot.ch/2013/03/montecarlo-method-of-finding-area-of.html"></a></li>
-          <li>Bootstrap : <a href="https://getbootstrap.com/docs/4.1/getting-started/introduction/"></a></li>
-          <li>Draw avec p5 : <a href="https://p5js.org/reference/"></a></li>
+          <li>Wikipedia : <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method"></a></li>
+          <li>Monte Carlo method  example in Python : <a href="https://geekyisawesome.blogspot.ch/2013/03/montecarlo-method-of-finding-area-of.html"></a></li>
         </ul>
+      <h2>Libraries</h2>
+        <ul>
+          <li>Bootstrap : <a href="https://getbootstrap.com"></a></li>
+          <li>p5.js :  <a href="https://p5js.org"></a></li>
+        </ul>
+        <p class="lead center">Damian Petroff - HE-Arc - 2018</p>
     </div>
+
 </body>
 </html>
