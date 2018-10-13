@@ -4,9 +4,11 @@ a:after {
 
 #holder {
   border: 10px dashed #ccc;
+	border-radius:5px;
   width: 100%;
   height: 300px;
   margin: 20px auto;
+	background-color:black;
 }
 
 #holder.hover {
@@ -24,7 +26,7 @@ a:after {
 
 #files li:hover, #files li:focus {
   color: #23527c;
-  text-decoration: underline;
+  text-decoration:none;
 }
 
 dl {
