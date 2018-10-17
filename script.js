@@ -51,9 +51,15 @@ function draw() {
       else rect((cWidth-(cWidth*r))/2,0,cWidth*r,cHeight);
       break;
     case 'triangle':
-      textSize(32);
-      fill(255,0,0);
-      text('Not yet implemented', cWidth/3, cWidth/2);
+      fill(color(255,255,100));
+      let size=500;
+      let ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.moveTo(cWidth/2, 0);
+      ctx.lineTo(cWidth, cHeight);
+      ctx.lineTo(0, cHeight);
+      ctx.lineTo(cWidth/2, 0);
+      ctx.fill();
       break;
     default:
       break;
@@ -92,7 +98,13 @@ function solve() {
       trueArea = rect_width*rect_height;
       foundArea = Math.pow(max(rect_width, rect_height),2)*ratio;
       //TODO : généraliser foundArea avec un truc genre intSizeOfSquare
-
+      break;
+    case 'triangle':
+      let base = parseInt($('#triangle_base').val());
+      let height = parseInt($('#triangle_height').val());
+      ratio = evaluateRatioTriangle(base, heigth, n);
+      trueArea = 0.5 * base * height;
+      // foundArea = Math.pow(max())
       break;
   }
   precisionInPercent = (1-Math.abs(trueArea-foundArea)/trueArea)*100;
@@ -232,5 +244,7 @@ $(document).ready(function(){
   $('#radius_number').on('change', function() {cleanResultsAndPoints();});
   $('#side_a').on('change', function() {cleanResultsAndPoints();});
   $('#side_b').on('change', function() {cleanResultsAndPoints();});
+  $('#triangle_base').on('change', function() {cleanResultsAndPoints();});
+  $('#triangle_height').on('change', function() {cleanResultsAndPoints();});
   updateFields();
 })
