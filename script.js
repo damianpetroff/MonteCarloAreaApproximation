@@ -52,13 +52,15 @@ function draw() {
       break;
     case 'triangle':
       fill(color(255,255,100));
+      let tw = parseFloat($('#triangle_base').val());
+      let th = parseFloat($('#triangle_height').val());
       let size=500;
       let ctx = canvas.getContext('2d');
       ctx.beginPath();
-      ctx.moveTo(cWidth/2, 0);
-      ctx.lineTo(cWidth, cHeight);
-      ctx.lineTo(0, cHeight);
-      ctx.lineTo(cWidth/2, 0);
+      ctx.moveTo(cWidth/10*tw/2, 0);
+      ctx.lineTo(cWidth/10*tw, cHeight/10*th);
+      ctx.lineTo(0, cHeight/10*th);
+      ctx.lineTo(cWidth/10*tw/2, 0);
       ctx.fill();
       break;
     default:
@@ -102,9 +104,11 @@ function solve() {
     case 'triangle':
       let base = parseInt($('#triangle_base').val());
       let height = parseInt($('#triangle_height').val());
-      ratio = evaluateRatioTriangle(base, heigth, n);
+      ratio = evaluateRatioTriangle(base, height);
       trueArea = 0.5 * base * height;
-      // foundArea = Math.pow(max())
+      let halfBase = base/2;
+      let slanted = Math.sqrt( Math.pow(halfBase, 2) + Math.pow(height, 2) );
+      foundArea = ratio*trueArea*2;
       break;
   }
   precisionInPercent = (1-Math.abs(trueArea-foundArea)/trueArea)*100;
@@ -133,6 +137,21 @@ function evaluateRatioRectangle(rect_width, rect_height){
       if(points[i][1] <= 1/res + (1-(1/res))/2 && points[i][1] >= (1-(1/res))/2) nOfIn++;
     }
     else return 1; //Si le rectangle est un carré, on a l'aire 100% des points dedans
+  }
+  return nOfIn/points.length;
+}
+
+function evaluateRatioTriangle(base, height){
+  //TODO: this only works for equal triangle
+  let nOfIn=0;
+  let rct = Math.abs((base/2))/height;
+  for(let i=0;i<points.length;i++){
+    let x = points[i][0];
+    let y = points[i][1];
+    let rcp = Math.abs((x-0.5))/y;
+    if (rcp < rct && y < height) {
+      nOfIn++;
+    }
   }
   return nOfIn/points.length;
 }
