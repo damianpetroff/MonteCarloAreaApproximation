@@ -1,10 +1,9 @@
-//TODO : CHECK ALL THE TODOS
+/*
+  These are some forthcoming upgrades
+*/
 //TODO : make all number inputs simpleinputs and check if number, in order to allow float values
 //TODO : more infos on datapanel
 //TODO : more simple shapes
-//TODO : comment !
-//TODO : clarify *1
-
 
 //BONUS TODO :
 // custom color
@@ -12,8 +11,7 @@
 // dark mode
 // Run 100 times and get best precision
 // Make an option abling to do "infinite" iterations, refreshing the datas all the time getting more and more precise. may be difficult. with button stop of course
-
-// *1 : Is it better to run it 100 times and get the most precise or run it 1 time with more iteration ? To be clarifed
+// Is it better to run it 100 times and get the most precise or run it 1 time with more iteration ? To be clarifed
 
 //______________________________________________________________________________________________________________________________________________
 
@@ -69,7 +67,7 @@ function draw() {
 }
 
 function solve() {
-  let n = $('#n_points').val(); //TODO : champ de saisie du nombre d'itérations
+  let n = $('#n_points').val();
   let ratio = 0;
   let trueArea = 0;
   let foundArea = 0;
@@ -91,19 +89,17 @@ function solve() {
       ratio = evaluateRatioRectangle(rect_width, rect_height, n);
       trueArea = rect_width*rect_height;
       foundArea = Math.pow(max(rect_width, rect_height),2)*ratio;
-      //TODO : généraliser foundArea avec un truc genre intSizeOfSquare
-
       break;
   }
   precisionInPercent = (1-Math.abs(trueArea-foundArea)/trueArea)*100;
   updateData(trueArea, foundArea, precisionInPercent, n, approxPi);
-  //TODO : Afficher tout ça dans un div.
 }
 
 function evaluateRatioCircle(radius){
   let nOfIn=0;
   for(let i=0;i<points.length;i++)
-    if(Math.sqrt(Math.pow(points[i][0],2)+Math.pow(points[i][1],2))<=1) //Fonction d'évaluation
+    //CONDITION
+    if(Math.sqrt(Math.pow(points[i][0],2)+Math.pow(points[i][1],2))<=1)
       nOfIn++;
   return nOfIn/points.length;
 }
@@ -112,15 +108,11 @@ function evaluateRatioRectangle(rect_width, rect_height){
   let nOfIn=0;
   let res = rect_width/rect_height;
   for(let i=0;i<points.length;i++){
-    if(res<1) //Fonction d'évaluation
-    {
-      if(points[i][0] <= res + (1-res)/2 && points[i][0] >= (1-res)/2) nOfIn++;
-    }
-    else if(res>1)
-    {
-      if(points[i][1] <= 1/res + (1-(1/res))/2 && points[i][1] >= (1-(1/res))/2) nOfIn++;
-    }
-    else return 1; //Si le rectangle est un carré, on a l'aire 100% des points dedans
+    if(res==1)
+      return 1;
+    //CONDITION
+    if((res<1&&(points[i][0] <= res + (1-res)/2 && points[i][0] >= (1-res)/2)) || (res>1&&(points[i][1] <= 1/res + (1-(1/res))/2 && points[i][1] >= (1-(1/res))/2)))
+      nOfIn++;
   }
   return nOfIn/points.length;
 }
