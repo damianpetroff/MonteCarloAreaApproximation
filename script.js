@@ -49,9 +49,17 @@ function draw() {
       else rect((cWidth-(cWidth*r))/2,0,cWidth*r,cHeight);
       break;
     case 'triangle':
-      textSize(32);
-      fill(255,0,0);
-      text('Not yet implemented', cWidth/3, cWidth/2);
+      fill(color(255,255,100));
+      let tw = parseFloat($('#triangle_base').val());
+      let th = parseFloat($('#triangle_height').val());
+      let size=500;
+      let ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.moveTo(cWidth/10*tw/2, 0);
+      ctx.lineTo(cWidth/10*tw, cHeight/10*th);
+      ctx.lineTo(0, cHeight/10*th);
+      ctx.lineTo(cWidth/10*tw/2, 0);
+      ctx.fill();
       break;
     default:
       break;
@@ -89,6 +97,16 @@ function solve() {
       ratio = evaluateRatioRectangle(rect_width, rect_height, n);
       trueArea = rect_width*rect_height;
       foundArea = Math.pow(max(rect_width, rect_height),2)*ratio;
+      //TODO : généraliser foundArea avec un truc genre intSizeOfSquare
+      break;
+    case 'triangle':
+      let base = parseInt($('#triangle_base').val());
+      let height = parseInt($('#triangle_height').val());
+      ratio = evaluateRatioTriangle(base, height);
+      trueArea = 0.5 * base * height;
+      let halfBase = base/2;
+      let slanted = Math.sqrt( Math.pow(halfBase, 2) + Math.pow(height, 2) );
+      foundArea = ratio*trueArea*2;
       break;
   }
   precisionInPercent = (1-Math.abs(trueArea-foundArea)/trueArea)*100;
@@ -113,6 +131,21 @@ function evaluateRatioRectangle(rect_width, rect_height){
     //CONDITION
     if((res<1&&(points[i][0] <= res + (1-res)/2 && points[i][0] >= (1-res)/2)) || (res>1&&(points[i][1] <= 1/res + (1-(1/res))/2 && points[i][1] >= (1-(1/res))/2)))
       nOfIn++;
+  }
+  return nOfIn/points.length;
+}
+
+function evaluateRatioTriangle(base, height){
+  //TODO: this only works for equal triangle
+  let nOfIn=0;
+  let rct = Math.abs((base/2))/height;
+  for(let i=0;i<points.length;i++){
+    let x = points[i][0];
+    let y = points[i][1];
+    let rcp = Math.abs((x-0.5))/y;
+    if (rcp < rct && y < height) {
+      nOfIn++;
+    }
   }
   return nOfIn/points.length;
 }
@@ -224,5 +257,7 @@ $(document).ready(function(){
   $('#radius_number').on('change', function() {cleanResultsAndPoints();});
   $('#side_a').on('change', function() {cleanResultsAndPoints();});
   $('#side_b').on('change', function() {cleanResultsAndPoints();});
+  $('#triangle_base').on('change', function() {cleanResultsAndPoints();});
+  $('#triangle_height').on('change', function() {cleanResultsAndPoints();});
   updateFields();
 })
